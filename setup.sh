@@ -2,38 +2,38 @@
 # Quick setup script for TRM Recursion Study
 # Run with: bash setup.sh
 
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║  TRM Recursion Study - Quick Setup                        ║"
-echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+echo "  TRM Recursion Study - Quick Setup                        "
+echo ""
 echo ""
 
 # Check Python version
-echo "1️⃣  Checking Python version..."
+echo "1⃣  Checking Python version..."
 PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
-echo "   ✓ Python $PYTHON_VERSION detected"
+echo "    Python $PYTHON_VERSION detected"
 echo ""
 
 # Create virtual environment (optional but recommended)
-read -p "2️⃣  Create virtual environment? (recommended) [y/N]: " -n 1 -r
+read -p "2⃣  Create virtual environment? (recommended) [y/N]: " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     echo "   Creating virtual environment..."
     python3 -m venv venv
     source venv/bin/activate
-    echo "   ✓ Virtual environment created and activated"
+    echo "    Virtual environment created and activated"
 else
-    echo "   ⚠️  Skipping virtual environment"
+    echo "     Skipping virtual environment"
 fi
 echo ""
 
 # Install dependencies
-echo "3️⃣  Installing dependencies..."
+echo "3⃣  Installing dependencies..."
 if [ -f "requirements.txt" ] && [ -s "requirements.txt" ]; then
     pip install -r requirements.txt --quiet
-    echo "   ✓ Dependencies installed"
+    echo "    Dependencies installed"
 else
-    echo "   ❌ requirements.txt is missing or empty!"
+    echo "    requirements.txt is missing or empty!"
     echo "   Creating requirements.txt..."
     cat > requirements.txt << 'EOF'
 # Core dependencies
@@ -49,65 +49,65 @@ pyyaml>=6.0
 wandb>=0.15.0
 jupyter>=1.0.0
 EOF
-    echo "   ✓ Created requirements.txt"
+    echo "    Created requirements.txt"
     pip install -r requirements.txt --quiet
-    echo "   ✓ Dependencies installed"
+    echo "    Dependencies installed"
 fi
 echo ""
 
 # Create necessary directories
-echo "4️⃣  Creating directory structure..."
+echo "4⃣  Creating directory structure..."
 mkdir -p results/figures
 mkdir -p checkpoints
 mkdir -p data
 touch results/.gitkeep
 touch results/figures/.gitkeep
-echo "   ✓ Directories created"
+echo "    Directories created"
 echo ""
 
 # Test imports
-echo "5️⃣  Testing imports..."
+echo "5⃣  Testing imports..."
 python3 -c "
 import torch
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import tqdm
-print('   ✓ All imports successful')
+print('    All imports successful')
 "
 echo ""
 
 # Check for CUDA/MPS
-echo "6️⃣  Checking GPU support..."
+echo "6⃣  Checking GPU support..."
 python3 -c "
 import torch
 if torch.cuda.is_available():
-    print('   ✓ CUDA available: ' + torch.cuda.get_device_name(0))
+    print('    CUDA available: ' + torch.cuda.get_device_name(0))
 elif torch.backends.mps.is_available():
-    print('   ✓ MPS (Apple Silicon) available')
+    print('    MPS (Apple Silicon) available')
 else:
-    print('   ⚠️  No GPU detected (CPU only)')
+    print('     No GPU detected (CPU only)')
 "
 echo ""
 
 # Test quick_start.py
-echo "7️⃣  Testing quick_start.py..."
+echo "7⃣  Testing quick_start.py..."
 if [ -f "quick_start.py" ]; then
     python3 -m py_compile quick_start.py
     if [ $? -eq 0 ]; then
-        echo "   ✓ quick_start.py compiles successfully"
+        echo "    quick_start.py compiles successfully"
     else
-        echo "   ❌ quick_start.py has syntax errors"
+        echo "    quick_start.py has syntax errors"
     fi
 else
-    echo "   ⚠️  quick_start.py not found"
+    echo "     quick_start.py not found"
 fi
 echo ""
 
 # Summary
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║  SETUP COMPLETE!                                          ║"
-echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+echo "  SETUP COMPLETE!                                          "
+echo ""
 echo ""
 echo "Next steps:"
 echo "  1. Quick test:    python3 quick_start.py"

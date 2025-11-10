@@ -28,13 +28,13 @@ def main():
     # Detect device
     if torch.cuda.is_available():
         device = torch.device("cuda")
-        print(f"✓ Using GPU: {torch.cuda.get_device_name(0)}")
+        print(f" Using GPU: {torch.cuda.get_device_name(0)}")
     elif torch.backends.mps.is_available():
         device = torch.device("mps")
-        print("✓ Using Apple Silicon GPU (MPS)")
+        print(" Using Apple Silicon GPU (MPS)")
     else:
         device = torch.device("cpu")
-        print("⚠ Using CPU (will be slow)")
+        print(" Using CPU (will be slow)")
 
     # Create tiny dataset
     print("\nCreating toy dataset...")
@@ -98,7 +98,7 @@ def main():
     print("=" * 70 + "\n")
 
     if results["best_test_acc"] > 0.10:
-        print("✓ Installation verified! Model is learning.")
+        print(" Installation verified! Model is learning.")
         print("\nNext steps:")
         print(
             "1. Run full tests: python experiments/run_experiments.py --config config/quick_test.yaml"
@@ -106,7 +106,7 @@ def main():
         print("2. See docs/SETUP.md for detailed instructions")
         print("3. Check README.md for experiment details")
     else:
-        print("⚠ Model accuracy very low - this is expected on random data")
+        print(" Model accuracy very low - this is expected on random data")
         print("Run with real Sudoku data for meaningful results")
 
     return results
@@ -116,9 +116,9 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n✗ Interrupted by user")
+        print("\n\n Interrupted by user")
     except Exception as e:
-        print(f"\n\n✗ Error: {e}")
+        print(f"\n\n Error: {e}")
         print("\nTroubleshooting:")
         print(
             "1. Check that all dependencies are installed: pip install -r requirements.txt"

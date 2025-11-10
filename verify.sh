@@ -13,9 +13,9 @@ error_count=0
 # Function to check file exists
 check_file() {
     if [ -f "$1" ]; then
-        echo "✓ $1"
+        echo " $1"
     else
-        echo "✗ $1 (MISSING)"
+        echo " $1 (MISSING)"
         ((error_count++))
     fi
 }
@@ -23,9 +23,9 @@ check_file() {
 # Function to check directory exists
 check_dir() {
     if [ -d "$1" ]; then
-        echo "✓ $1/"
+        echo " $1/"
     else
-        echo "✗ $1/ (MISSING)"
+        echo " $1/ (MISSING)"
         ((error_count++))
     fi
 }
@@ -71,7 +71,7 @@ check_file "docs/GITHUB_SETUP.md"
 echo ""
 echo "============================================"
 if [ $error_count -eq 0 ]; then
-    echo "✓ All files present! Repository is complete."
+    echo " All files present! Repository is complete."
     echo "============================================"
     echo ""
     echo "Next steps:"
@@ -79,7 +79,7 @@ if [ $error_count -eq 0 ]; then
     echo "2. Or: ./setup.sh (if not done already)"
     exit 0
 else
-    echo "✗ $error_count file(s) missing!"
+    echo " $error_count file(s) missing!"
     echo "============================================"
     echo ""
     echo "Please ensure all files are in the correct locations."
