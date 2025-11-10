@@ -1,11 +1,5 @@
 """
 Training utilities for Tiny Recursive Models
-
-Includes:
-- Deep supervision training loop
-- Exponential Moving Average (EMA)
-- Evaluation functions
-- Logging utilities
 """
 
 import torch
@@ -17,24 +11,16 @@ import copy
 
 
 class ExponentialMovingAverage:
-    """
-    Exponential Moving Average for model parameters.
-    Improves stability and generalization on small datasets.
-    """
-
     def __init__(self, model, decay=0.999):
         self.model = model
         self.decay = decay
         self.shadow = {}
         self.backup = {}
-
-        # Initialize shadow parameters
         for name, param in model.named_parameters():
             if param.requires_grad:
                 self.shadow[name] = param.data.clone()
 
     def update(self):
-        """Update EMA parameters"""
         for name, param in self.model.named_parameters():
             if param.requires_grad:
                 self.shadow[name] = (
@@ -42,14 +28,12 @@ class ExponentialMovingAverage:
                 )
 
     def apply_shadow(self):
-        """Apply EMA parameters to model"""
         for name, param in self.model.named_parameters():
             if param.requires_grad:
                 self.backup[name] = param.data.clone()
                 param.data = self.shadow[name]
 
     def restore(self):
-        """Restore original parameters"""
         for name, param in self.model.named_parameters():
             if param.requires_grad:
                 param.data = self.backup[name]
@@ -57,10 +41,6 @@ class ExponentialMovingAverage:
 
 
 class TRMTrainer:
-    """
-    Trainer for Tiny Recursive Models with deep supervision.
-    """
-
     def __init__(
         self,
         model,
@@ -76,13 +56,10 @@ class TRMTrainer:
         self.device = device
         self.grad_clip = grad_clip
         self.n_supervision = n_supervision
-
-        # EMA
         self.use_ema = use_ema
         if use_ema:
             self.ema = ExponentialMovingAverage(model, decay=ema_decay)
 
-        # Metrics tracking
         self.history = {
             "train_loss": [],
             "train_acc": [],
@@ -92,9 +69,7 @@ class TRMTrainer:
         }
 
     def train_epoch(self, train_loader):
-        """Train for one epoch"""
         self.model.train()
-
         total_loss = 0.0
         total_correct = 0
         total_tokens = 0
@@ -104,25 +79,18 @@ class TRMTrainer:
         pbar = tqdm(train_loader, desc="Training")
         for x, y in pbar:
             x, y = x.to(self.device), y.to(self.device)
-
-            # Forward pass
             self.optimizer.zero_grad()
             y_pred, losses = self.model(x, y, n_supervision=self.n_supervision)
-
-            # Backward pass
             losses["total_loss"].backward()
 
-            # Gradient clipping
             if self.grad_clip > 0:
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.grad_clip)
 
             self.optimizer.step()
 
-            # Update EMA
             if self.use_ema:
                 self.ema.update()
 
-            # Metrics
             pred_tokens = y_pred.argmax(dim=-1)
             batch_correct = (pred_tokens == y).sum().item()
             batch_tokens = y.numel()
@@ -133,7 +101,6 @@ class TRMTrainer:
             total_steps += losses["steps"]
             num_batches += 1
 
-            # Update progress bar
             pbar.set_postfix(
                 {
                     "loss": f"{losses['total_loss'].item():.4f}",
@@ -145,15 +112,11 @@ class TRMTrainer:
         avg_loss = total_loss / num_batches
         avg_acc = total_correct / total_tokens
         avg_steps = total_steps / num_batches
-
         return {"loss": avg_loss, "accuracy": avg_acc, "avg_steps": avg_steps}
 
     @torch.no_grad()
     def evaluate(self, test_loader, use_ema=True):
-        """Evaluate on test set"""
         self.model.eval()
-
-        # Apply EMA if requested
         if use_ema and self.use_ema:
             self.ema.apply_shadow()
 
@@ -162,18 +125,13 @@ class TRMTrainer:
 
         for x, y in tqdm(test_loader, desc="Evaluating"):
             x, y = x.to(self.device), y.to(self.device)
-
-            # Forward pass (full supervision steps at test time)
             y_pred = self.model(x, n_supervision=self.n_supervision)
-
-            # Accuracy
             pred_tokens = y_pred.argmax(dim=-1)
             total_correct += (pred_tokens == y).sum().item()
             total_tokens += y.numel()
 
         accuracy = total_correct / total_tokens
 
-        # Restore original parameters
         if use_ema and self.use_ema:
             self.ema.restore()
 
@@ -260,7 +218,7 @@ class TRMTrainer:
             checkpoint["ema_shadow"] = self.ema.shadow
 
         torch.save(checkpoint, path)
-        print(f"✓ Checkpoint saved: {path} (acc={accuracy:.4f})")
+        print(f" Checkpoint saved: {path} (acc={accuracy:.4f})")
 
     def load_checkpoint(self, path):
         """Load model checkpoint"""
@@ -273,7 +231,7 @@ class TRMTrainer:
         if self.use_ema and "ema_shadow" in checkpoint:
             self.ema.shadow = checkpoint["ema_shadow"]
 
-        print(f"✓ Checkpoint loaded: {path}")
+        print(f" Checkpoint loaded: {path}")
         return checkpoint
 
 
@@ -317,5 +275,5 @@ if __name__ == "__main__":
         train_loader=train_loader, test_loader=test_loader, num_epochs=2, eval_freq=1
     )
 
-    print("\n✓ Trainer test passed!")
+    print("\n Trainer test passed!")
     print(f"Final test accuracy: {results['best_test_acc']:.4f}")

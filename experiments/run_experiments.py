@@ -1,12 +1,5 @@
 """
 Main Experiment Runner for TRM
-
-Runs systematic experiments testing recursion depth vs network size.
-Saves results as CSV and JSON for analysis.
-
-Usage:
-    python run_experiments.py --config config/sudoku_config.yaml
-    python run_experiments.py --config config/quick_test.yaml --device cuda
 """
 
 import torch
@@ -29,7 +22,6 @@ from src.trainer import TRMTrainer
 
 
 def set_seed(seed):
-    """Set random seeds for reproducibility"""
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -38,7 +30,6 @@ def set_seed(seed):
 
 
 def get_device(device_str):
-    """Get appropriate device"""
     if device_str == "auto":
         if torch.cuda.is_available():
             return torch.device("cuda")
@@ -50,33 +41,20 @@ def get_device(device_str):
 
 
 def create_toy_sudoku_data(n_samples, augmentations=10):
-    """
-    Create toy Sudoku-like data for testing.
-    In real experiments, replace with actual Sudoku dataset.
-    """
-    # Random puzzles (input)
     puzzles = torch.randint(0, 10, (n_samples, 81))
-
-    # Random solutions (target) - not actual Sudoku solutions
     solutions = torch.randint(1, 10, (n_samples, 81))
 
-    # Augmentation: create multiple versions of each puzzle
     if augmentations > 1:
         puzzles_aug = puzzles.repeat_interleave(augmentations, dim=0)
         solutions_aug = solutions.repeat_interleave(augmentations, dim=0)
-
-        # Add some noise for variety (in real case, use proper Sudoku augmentation)
         noise_mask = torch.rand_like(puzzles_aug.float()) < 0.1
         puzzles_aug = puzzles_aug.masked_fill(noise_mask, 0)
-
         return TensorDataset(puzzles_aug, solutions_aug)
 
     return TensorDataset(puzzles, solutions)
 
 
 def run_single_experiment(config, exp_config, device):
-    """Run a single experiment configuration"""
-
     print(f"\n{'=' * 70}")
     print(f"Experiment: {exp_config['name']}")
     print(f"  Layers: {exp_config['num_layers']}")
@@ -195,12 +173,12 @@ def main(args):
             result = run_single_experiment(config, exp_config, device)
             all_results.append(result)
 
-            print(f"\n✓ {exp_config['name']} complete!")
+            print(f"\n {exp_config['name']} complete!")
             print(f"  Best Test Acc: {result['best_test_acc']:.4f}")
             print(f"  Gen Gap: {result['gen_gap']:.4f}")
 
         except Exception as e:
-            print(f"\n✗ {exp_config['name']} failed: {str(e)}")
+            print(f"\n {exp_config['name']} failed: {str(e)}")
             continue
 
     # Save results
@@ -213,13 +191,13 @@ def main(args):
     )
     csv_path = output_dir / "experiment_results.csv"
     df.to_csv(csv_path, index=False)
-    print(f"  ✓ CSV saved: {csv_path}")
+    print(f"   CSV saved: {csv_path}")
 
     # JSON details (with history)
     json_path = output_dir / "detailed_results.json"
     with open(json_path, "w") as f:
         json.dump(all_results, f, indent=2, default=str)
-    print(f"  ✓ JSON saved: {json_path}")
+    print(f"   JSON saved: {json_path}")
 
     # Print summary table
     print(f"\n{'=' * 70}")
@@ -228,7 +206,7 @@ def main(args):
     print(df.to_string(index=False))
     print(f"{'=' * 70}\n")
 
-    print("✓ All experiments complete!")
+    print(" All experiments complete!")
     print(f"Results saved to: {output_dir}/")
 
 

@@ -1,14 +1,6 @@
 """
 Tiny Recursive Model (TRM) Implementation
-
 Based on "Less is More: Recursive Reasoning with Tiny Networks"
-by Alexia Jolicoeur-Martineau (Samsung SAIL Montreal, 2025)
-
-Key components:
-- Single tiny network (2 layers by default)
-- Latent recursion: z ← net(x, y, z) [n times]
-- Answer refinement: y ← net(y, z)
-- Deep supervision with early stopping (ACT)
 """
 
 import torch
@@ -19,21 +11,15 @@ import torch.nn.functional as F
 class TinyRecursiveModel(nn.Module):
     """
     Tiny Recursive Model for reasoning tasks.
-
-    Architecture:
-        - Input embedding
-        - Recursive reasoning network (MLP or Transformer)
-        - Output prediction head
-        - Halting prediction head (for ACT)
-
+    
     Args:
-        vocab_size: Size of vocabulary (10 for Sudoku: 0-9)
-        hidden_size: Hidden dimension (default: 256)
-        num_layers: Number of network layers (default: 2)
-        n_recursions: Number of latent recursion steps (default: 6)
-        T_cycles: Number of deep recursion cycles (default: 3)
-        seq_len: Sequence length (81 for 9×9 Sudoku)
-        use_attention: Use self-attention vs MLP (default: False)
+        vocab_size: Vocabulary size
+        hidden_size: Hidden dimension
+        num_layers: Number of network layers
+        n_recursions: Latent recursion steps
+        T_cycles: Deep recursion cycles
+        seq_len: Sequence length
+        use_attention: Use self-attention vs MLP
     """
 
     def __init__(
@@ -56,47 +42,34 @@ class TinyRecursiveModel(nn.Module):
         self.seq_len = seq_len
         self.use_attention = use_attention
 
-        # Input embedding
         self.input_embedding = nn.Embedding(vocab_size, hidden_size)
-
-        # Initialize y and z (learnable)
         self.y_init = nn.Parameter(torch.randn(1, seq_len, hidden_size) * 0.01)
         self.z_init = nn.Parameter(torch.randn(1, seq_len, hidden_size) * 0.01)
 
-        # Reasoning network
         if use_attention:
             self.net = self._build_transformer_network()
         else:
             self.net = self._build_mlp_network()
 
-        # Output heads
         self.output_head = nn.Linear(hidden_size, vocab_size)
-        self.q_head = nn.Linear(hidden_size, 1)  # Halting prediction
+        self.q_head = nn.Linear(hidden_size, 1)
 
     def _build_mlp_network(self):
-        """Build MLP-based reasoning network"""
-        # Simple MLP: always takes [x, y, z] concatenated (hidden_size * 3)
-        # and outputs hidden_size
         layers = [
             nn.Linear(self.hidden_size * 3, self.hidden_size * 4),
             nn.ReLU(),
         ]
         
-        # Add intermediate layers
         for i in range(self.num_layers - 1):
             layers.extend([
                 nn.Linear(self.hidden_size * 4, self.hidden_size * 4),
                 nn.ReLU(),
             ])
         
-        # Final output layer
         layers.append(nn.Linear(self.hidden_size * 4, self.hidden_size))
-
         return nn.Sequential(*layers)
 
     def _build_transformer_network(self):
-        """Build Transformer-based reasoning network"""
-        # Simplified transformer for reasoning
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=self.hidden_size * 3,
             nhead=8,
@@ -111,105 +84,47 @@ class TinyRecursiveModel(nn.Module):
         )
 
     def latent_recursion(self, x, y, z):
-        """
-        Perform one full recursion cycle:
-        1. Update z (latent reasoning) n times
-        2. Update y (answer) once
-
-        Args:
-            x: Input embedding [B, L, D]
-            y: Current answer embedding [B, L, D]
-            z: Current latent embedding [B, L, D]
-
-        Returns:
-            Updated (y, z)
-        """
-        # Latent recursion (n steps)
         for _ in range(self.n_recursions):
             combined = torch.cat([x, y, z], dim=-1)
             z = self.net(combined)
-
-            # Residual connection
             if hasattr(self, "use_residual") and self.use_residual:
                 z = z + self.z_init.expand(x.size(0), -1, -1)
 
-        # Answer refinement (1 step)
         combined = torch.cat([x, y, z], dim=-1)
         y = self.net(combined)
-
         return y, z
 
     def deep_recursion(self, x, y, z):
-        """
-        Perform deep recursion with (T-1) no-gradient cycles + 1 gradient cycle.
-
-        This implements the key TRM insight: run multiple recursion cycles
-        without gradients to improve (y, z), then one cycle with gradients.
-
-        Args:
-            x: Input embedding [B, L, D]
-            y: Initial answer embedding [B, L, D]
-            z: Initial latent embedding [B, L, D]
-
-        Returns:
-            Updated (y, z), predictions, halting score
-        """
-        # T-1 cycles without gradients (efficiency)
         with torch.no_grad():
             for _ in range(self.T_cycles - 1):
                 y, z = self.latent_recursion(x, y, z)
 
-        # Final cycle with gradients (learning)
         y, z = self.latent_recursion(x, y, z)
-
-        # Generate predictions
-        y_pred = self.output_head(y)  # [B, L, vocab_size]
-        q_pred = torch.sigmoid(
-            self.q_head(y.mean(dim=1))  # [B, 1]
-        )
-
+        y_pred = self.output_head(y)
+        q_pred = torch.sigmoid(self.q_head(y.mean(dim=1)))
         return (y.detach(), z.detach()), y_pred, q_pred
 
     def forward(self, x_input, y_true=None, n_supervision=16):
-        """
-        Forward pass with deep supervision.
-
-        Args:
-            x_input: Input tokens [B, L]
-            y_true: Target tokens [B, L] (optional, for training)
-            n_supervision: Maximum supervision steps (default: 16)
-
-        Returns:
-            If training: (predictions, loss_dict)
-            If inference: predictions
-        """
         B = x_input.size(0)
         device = x_input.device
 
-        # Embed input
-        x = self.input_embedding(x_input)  # [B, L, D]
-
-        # Initialize y and z
+        x = self.input_embedding(x_input)
         y = self.y_init.expand(B, -1, -1).to(device)
         z = self.z_init.expand(B, -1, -1).to(device)
 
-        # Deep supervision loop
         total_loss = 0.0
         steps_taken = 0
 
         for step in range(n_supervision):
-            # Run deep recursion
             (y, z), y_pred, q_pred = self.deep_recursion(x, y, z)
 
             if y_true is not None:
-                # Cross-entropy loss
                 ce_loss = F.cross_entropy(
                     y_pred.reshape(-1, self.vocab_size),
                     y_true.reshape(-1),
                     reduction="mean",
                 )
 
-                # Halting loss (predict if solution is correct)
                 correct = (
                     (y_pred.argmax(dim=-1) == y_true).float().mean(dim=1, keepdim=True)
                 )
@@ -219,7 +134,6 @@ class TinyRecursiveModel(nn.Module):
                 total_loss += step_loss
                 steps_taken += 1
 
-                # Early stopping (Adaptive Computational Time)
                 if q_pred.mean() > 0.5:
                     break
 
@@ -235,11 +149,9 @@ class TinyRecursiveModel(nn.Module):
             return y_pred
 
     def count_parameters(self):
-        """Count trainable parameters"""
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
 
     def get_config(self):
-        """Return model configuration"""
         return {
             "vocab_size": self.vocab_size,
             "hidden_size": self.hidden_size,
@@ -288,4 +200,4 @@ if __name__ == "__main__":
     pred = model(x)
     print(f"\nInference output shape: {pred.shape}")
 
-    print("\n✓ Model test passed!")
+    print("\n Model test passed!")

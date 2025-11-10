@@ -66,7 +66,7 @@ print(f'CUDA available: {torch.cuda.is_available()}')
 
 model = TinyRecursiveModel()
 print(f'Model created: {model.count_parameters()/1e6:.2f}M parameters')
-print('✓ Installation successful!')
+print(' Installation successful!')
 "
 ```
 
@@ -129,9 +129,9 @@ baseline_2L_n6       2       6  7.0       0.82-0.87
 ```
 
 **Key findings:**
-- ✅ 2 layers outperforms 1 or 4 layers
-- ✅ n=6 recursions is optimal
-- ✅ Small networks + deep recursion > large networks
+-  2 layers outperforms 1 or 4 layers
+-  n=6 recursions is optimal
+-  Small networks + deep recursion > large networks
 
 ## Configuration
 
@@ -242,46 +242,46 @@ After successful experiments:
 ## Hardware-Specific Notes
 
 ### M4 MacBook Pro
-- ✅ Perfect for development and testing
-- ✅ Use MPS acceleration (`device: mps`)
-- ⚠️ Full experiments take 10-20x longer
-- 💡 Use Colab for full experiments
+-  Perfect for development and testing
+-  Use MPS acceleration (`device: mps`)
+-  Full experiments take 10-20x longer
+-  Use Colab for full experiments
 
 ### Google Colab
-- ✅ Free GPU (T4, 15GB VRAM)
-- ✅ Can run full experiments
-- ⚠️ Session timeout after ~12 hours
-- 💡 Use notebook in `notebooks/` folder
+-  Free GPU (T4, 15GB VRAM)
+-  Can run full experiments
+-  Session timeout after ~12 hours
+-  Use notebook in `notebooks/` folder
 
 ### NVIDIA GPU (16GB+)
-- ✅ Optimal setup
-- ✅ Can run all experiments
-- 💡 Increase batch size to utilize VRAM
+-  Optimal setup
+-  Can run all experiments
+-  Increase batch size to utilize VRAM
 
 ### CPU Only
-- ⚠️ Very slow (50-100x slower)
-- ✅ Use `quick_test.yaml` only
-- 💡 Consider cloud GPU services
+-  Very slow (50-100x slower)
+-  Use `quick_test.yaml` only
+-  Consider cloud GPU services
 
 ## File Structure Reference
 
 ```
 trm-recursion-study/
-├── src/                    # Source code
-│   ├── model.py           # TRM architecture
-│   ├── trainer.py         # Training loop
-│   └── ...
-├── experiments/           # Experiment scripts
-│   └── run_experiments.py
-├── config/                # Configuration files
-│   ├── sudoku_config.yaml
-│   └── quick_test.yaml
-├── results/               # Results (auto-generated)
-│   ├── experiment_results.csv
-│   └── figures/
-├── checkpoints/           # Model checkpoints
-├── requirements.txt       # Dependencies
-└── README.md             # Main documentation
+ src/                    # Source code
+    model.py           # TRM architecture
+    trainer.py         # Training loop
+    ...
+ experiments/           # Experiment scripts
+    run_experiments.py
+ config/                # Configuration files
+    sudoku_config.yaml
+    quick_test.yaml
+ results/               # Results (auto-generated)
+    experiment_results.csv
+    figures/
+ checkpoints/           # Model checkpoints
+ requirements.txt       # Dependencies
+ README.md             # Main documentation
 ```
 
 ## Getting Help

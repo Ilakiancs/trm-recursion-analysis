@@ -1,6 +1,5 @@
 """
-Data loading utilities for TRM experiments.
-Provides toy data generation and real Sudoku loading (if available).
+Data loading utilities for TRM experiments
 """
 import torch
 from torch.utils.data import Dataset, DataLoader, TensorDataset
@@ -9,28 +8,11 @@ from pathlib import Path
 from typing import Tuple, Optional
 
 class ToyDataGenerator:
-    """Generate toy Sudoku-like data for testing."""
-    
     @staticmethod
     def create_toy_data(n_samples: int = 500, seq_len: int = 81, 
                         vocab_size: int = 10) -> TensorDataset:
-        """
-        Create toy data that mimics Sudoku structure.
-        
-        Args:
-            n_samples: Number of samples to generate
-            seq_len: Length of each sequence (81 for 9x9 Sudoku)
-            vocab_size: Size of vocabulary (10 for digits 0-9)
-            
-        Returns:
-            TensorDataset with (puzzles, solutions)
-        """
-        # Generate random puzzles (0 = empty cell, 1-9 = filled)
         puzzles = torch.randint(0, vocab_size, (n_samples, seq_len))
-        
-        # Generate random solutions (1-9 only, no empty cells)
         solutions = torch.randint(1, vocab_size, (n_samples, seq_len))
-        
         return TensorDataset(puzzles, solutions)
     
     @staticmethod
@@ -90,7 +72,7 @@ class SudokuDataset(Dataset):
         self.split = split
         
         if use_toy_data or data_dir is None:
-            print(f"⚠️  Using toy data for {split} set")
+            print(f"  Using toy data for {split} set")
             n_samples = {'train': 500, 'val': 100, 'test': 200}[split]
             dataset = ToyDataGenerator.create_structured_toy_data(n_samples)
             self.puzzles = dataset.tensors[0]
@@ -102,11 +84,11 @@ class SudokuDataset(Dataset):
             solution_file = data_path / f"{split}_solutions.npy"
             
             if puzzle_file.exists() and solution_file.exists():
-                print(f"✓ Loading real Sudoku data from {data_path}")
+                print(f" Loading real Sudoku data from {data_path}")
                 self.puzzles = torch.from_numpy(np.load(puzzle_file))
                 self.solutions = torch.from_numpy(np.load(solution_file))
             else:
-                print(f"⚠️  Real data not found at {data_path}, using toy data")
+                print(f"  Real data not found at {data_path}, using toy data")
                 n_samples = {'train': 500, 'val': 100, 'test': 200}[split]
                 dataset = ToyDataGenerator.create_structured_toy_data(n_samples)
                 self.puzzles = dataset.tensors[0]
@@ -190,23 +172,23 @@ def verify_data(puzzles: torch.Tensor, solutions: torch.Tensor) -> bool:
     """
     # Check shapes
     if puzzles.shape != solutions.shape:
-        print(f"❌ Shape mismatch: puzzles {puzzles.shape} vs solutions {solutions.shape}")
+        print(f" Shape mismatch: puzzles {puzzles.shape} vs solutions {solutions.shape}")
         return False
     
     if puzzles.shape[1] != 81:
-        print(f"❌ Expected length 81, got {puzzles.shape[1]}")
+        print(f" Expected length 81, got {puzzles.shape[1]}")
         return False
     
     # Check value ranges
     if puzzles.min() < 0 or puzzles.max() >= 10:
-        print(f"❌ Puzzle values out of range [0, 9]: [{puzzles.min()}, {puzzles.max()}]")
+        print(f" Puzzle values out of range [0, 9]: [{puzzles.min()}, {puzzles.max()}]")
         return False
     
     if solutions.min() < 1 or solutions.max() >= 10:
-        print(f"❌ Solution values out of range [1, 9]: [{solutions.min()}, {solutions.max()}]")
+        print(f" Solution values out of range [1, 9]: [{solutions.min()}, {solutions.max()}]")
         return False
     
-    print("✓ Data verification passed")
+    print(" Data verification passed")
     return True
 
 
@@ -242,4 +224,4 @@ if __name__ == '__main__':
         print(f"   Sample solution (first 9 cells): {y[0, :9]}")
         break
     
-    print("\n✓ All tests passed!")
+    print("\n All tests passed!")

@@ -41,25 +41,25 @@ class TRMResultsAnalyzer:
         json_path = self.results_dir / 'detailed_results.json'
         
         if not csv_path.exists():
-            print(f"❌ Results not found at {csv_path}")
+            print(f" Results not found at {csv_path}")
             return False
         
         # Load summary
         self.results_df = pd.read_csv(csv_path)
-        print(f"✓ Loaded {len(self.results_df)} experiments from {csv_path}")
+        print(f" Loaded {len(self.results_df)} experiments from {csv_path}")
         
         # Load detailed results
         if json_path.exists():
             with open(json_path, 'r') as f:
                 self.detailed_results = json.load(f)
-            print(f"✓ Loaded detailed results from {json_path}")
+            print(f" Loaded detailed results from {json_path}")
         
         return True
     
     def print_summary(self):
         """Print summary statistics."""
         if self.results_df is None:
-            print("❌ No results loaded")
+            print(" No results loaded")
             return
         
         print("\n" + "="*70)
@@ -72,7 +72,7 @@ class TRMResultsAnalyzer:
         best_idx = self.results_df['test_acc'].idxmax()
         best = self.results_df.iloc[best_idx]
         
-        print(f"\n🏆 BEST CONFIGURATION:")
+        print(f"\n BEST CONFIGURATION:")
         print(f"   Name: {best['name']}")
         print(f"   Layers: {best['layers']}")
         print(f"   Recursions: {best['n_recursions']}")
@@ -83,7 +83,7 @@ class TRMResultsAnalyzer:
         worst_overfit_idx = self.results_df['gen_gap'].idxmax()
         worst = self.results_df.iloc[worst_overfit_idx]
         
-        print(f"\n⚠️  HIGHEST OVERFITTING:")
+        print(f"\n  HIGHEST OVERFITTING:")
         print(f"   Name: {worst['name']}")
         print(f"   Gen Gap: {worst['gen_gap']*100:.2f}%")
     
@@ -100,7 +100,7 @@ class TRMResultsAnalyzer:
         ].sort_values('layers')
         
         if len(layer_exps) == 0:
-            print("⚠️  No layer comparison experiments found")
+            print("  No layer comparison experiments found")
             return
         
         # Plot 1: Accuracy comparison
@@ -134,7 +134,7 @@ class TRMResultsAnalyzer:
         
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"✓ Saved to {save_path}")
+            print(f" Saved to {save_path}")
         plt.show()
     
     def plot_recursion_comparison(self, save_path: Optional[str] = None):
@@ -150,7 +150,7 @@ class TRMResultsAnalyzer:
         ].sort_values('n_recursions')
         
         if len(recursion_exps) < 2:
-            print("⚠️  Not enough recursion experiments found")
+            print("  Not enough recursion experiments found")
             return
         
         # Plot 1: Accuracy vs recursion
@@ -183,13 +183,13 @@ class TRMResultsAnalyzer:
         
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"✓ Saved to {save_path}")
+            print(f" Saved to {save_path}")
         plt.show()
     
     def plot_learning_curves(self, save_path: Optional[str] = None):
         """Plot learning curves from detailed results."""
         if self.detailed_results is None:
-            print("⚠️  No detailed results available")
+            print("  No detailed results available")
             return
         
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -215,7 +215,7 @@ class TRMResultsAnalyzer:
         
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"✓ Saved to {save_path}")
+            print(f" Saved to {save_path}")
         plt.show()
     
     def plot_parameter_efficiency(self, save_path: Optional[str] = None):
@@ -257,7 +257,7 @@ class TRMResultsAnalyzer:
         
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"✓ Saved to {save_path}")
+            print(f" Saved to {save_path}")
         plt.show()
     
     def generate_all_figures(self, output_dir: Optional[str] = None):
@@ -286,7 +286,7 @@ class TRMResultsAnalyzer:
         self.plot_parameter_efficiency(output_dir / 'parameter_efficiency.png')
         
         print("\n" + "="*70)
-        print(f"✓ All figures saved to {output_dir}/")
+        print(f" All figures saved to {output_dir}/")
         print("="*70)
 
 
@@ -320,7 +320,7 @@ def main():
     
     # Load results
     if not analyzer.load_results():
-        print("\n❌ Failed to load results")
+        print("\n Failed to load results")
         print(f"   Make sure experiment_results.csv exists in {args.results_dir}/")
         return
     

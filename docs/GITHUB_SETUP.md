@@ -73,7 +73,7 @@ git push
 
 ### Add Topics (for discoverability)
 1. Go to repository on GitHub
-2. Click "⚙️" next to "About"
+2. Click "" next to "About"
 3. Add topics:
    - `deep-learning`
    - `pytorch`
@@ -141,14 +141,14 @@ See [SETUP.md](docs/SETUP.md) for complete instructions.
 
 ### Share on Social Media
 ```
-🚀 New open-source implementation of Tiny Recursive Models (TRM)!
+ New open-source implementation of Tiny Recursive Models (TRM)!
 
-📊 Key findings:
+ Key findings:
 - 87.4% accuracy with only 7M parameters
 - Smaller networks + deep recursion > large networks
 - Full replication & extension experiments
 
-🔗 https://github.com/yourusername/trm-recursion-study
+ https://github.com/yourusername/trm-recursion-study
 
 #DeepLearning #PyTorch #RecursiveNeuralNetworks
 ```
@@ -271,11 +271,11 @@ git push -u origin experiment-maze-hard
 ## Next Steps
 
 After setup:
-1. ✅ Verify repository on GitHub
-2. ✅ Test clone on another machine
-3. ✅ Run quick_start.py to verify
-4. ✅ Add to your CV/portfolio
-5. ✅ Share with community
+1.  Verify repository on GitHub
+2.  Test clone on another machine
+3.  Run quick_start.py to verify
+4.  Add to your CV/portfolio
+5.  Share with community
 
 ---
 
