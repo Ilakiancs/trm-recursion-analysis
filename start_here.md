@@ -1,6 +1,6 @@
-# 🎯 START HERE - TRM Repository Complete Package
+#  START HERE - TRM Repository Complete Package
 
-## ✅ What You Have
+##  What You Have
 
 I've created a **complete, professional research repository** for your TRM (Tiny Recursive Models) project. Everything is ready to use!
 
@@ -8,28 +8,28 @@ I've created a **complete, professional research repository** for your TRM (Tiny
 
 ---
 
-## 📦 Quick Overview
+##  Quick Overview
 
 ```
-✅ Full TRM Implementation (PyTorch)
-✅ Systematic Experiments (6 configurations)
-✅ Professional Documentation (3 guides)
-✅ Ready for GitHub
-✅ Works on M4 Mac & GPU
-✅ Based on paper by Jolicoeur-Martineau (2025)
+ Full TRM Implementation (PyTorch)
+ Systematic Experiments (6 configurations)
+ Professional Documentation (3 guides)
+ Ready for GitHub
+ Works on M4 Mac & GPU
+ Based on paper by Jolicoeur-Martineau (2025)
 ```
 
 ---
 
-## 🚀 What To Do NOW (5 steps)
+##  What To Do NOW (5 steps)
 
 ### Step 1: Download All Files (1 minute)
 
 **These files are in `/mnt/user-data/outputs/`:**
 
 ```
-✓ All files are already created and ready!
-✓ Look for the download links in this chat
+ All files are already created and ready!
+ Look for the download links in this chat
 ```
 
 ### Step 2: Organize Files Locally (2 minutes)
@@ -42,12 +42,12 @@ cd trm-recursion-study
 # Extract/move all downloaded files here
 # Make sure directory structure matches:
 #   trm-recursion-study/
-#   ├── src/
-#   ├── config/
-#   ├── experiments/
-#   ├── docs/
-#   ├── results/
-#   └── (all root files)
+#    src/
+#    config/
+#    experiments/
+#    docs/
+#    results/
+#    (all root files)
 ```
 
 ### Step 3: Verify Everything (30 seconds)
@@ -56,7 +56,7 @@ cd trm-recursion-study
 # Run verification script
 bash verify.sh
 
-# Should output: "✓ All files present!"
+# Should output: " All files present!"
 ```
 
 ### Step 4: Test Installation (5 minutes)
@@ -85,39 +85,39 @@ git remote add origin https://github.com/YOUR_USERNAME/trm-recursion-study.git
 git push -u origin main
 ```
 
-**Done!** 🎉
+**Done!** 
 
 ---
 
-## 📖 Documentation Guide
+##  Documentation Guide
 
 ### For Setup & Installation
-👉 Read: **`docs/SETUP.md`**
+ Read: **`docs/SETUP.md`**
 - Complete installation guide
 - Hardware-specific instructions
 - Troubleshooting
 
 ### For GitHub
-👉 Read: **`docs/GITHUB_SETUP.md`**
+ Read: **`docs/GITHUB_SETUP.md`**
 - Step-by-step GitHub setup
 - Git commands
 - Collaboration guide
 
 ### For File Overview
-👉 Read: **`CHECKLIST.md`** or **`PACKAGE_README.md`**
+ Read: **`CHECKLIST.md`** or **`PACKAGE_README.md`**
 - Complete file list
 - What each file does
 - Expected results
 
 ### For Quick Reference
-👉 Read: **`README.md`** (main file)
+ Read: **`README.md`** (main file)
 - Project overview
 - Usage examples
 - Key results
 
 ---
 
-## 💻 Running Experiments
+##  Running Experiments
 
 ### On M4 MacBook (Quick Test - 10-20 min)
 ```bash
@@ -151,27 +151,27 @@ python experiments/run_experiments.py --config config/sudoku_config.yaml
 
 ---
 
-## 🎯 Expected Results
+##  Expected Results
 
 ### Quick Test (M4 Mac)
 ```
-✓ Verifies installation works
-✓ 3 experiments complete in 10-20 minutes
-✓ Accuracy: 15-25% (on random toy data)
+ Verifies installation works
+ 3 experiments complete in 10-20 minutes
+ Accuracy: 15-25% (on random toy data)
 ```
 
 ### Full Experiments (GPU)
 ```
-✓ Reproduces paper findings
-✓ 6 experiments complete in 4-6 hours
-✓ Accuracy: 82-87% (with proper Sudoku data)
+ Reproduces paper findings
+ 6 experiments complete in 4-6 hours
+ Accuracy: 82-87% (with proper Sudoku data)
 
 Key Finding: 2 layers + n=6 recursions = optimal!
 ```
 
 ---
 
-## 📁 What Each Main File Does
+##  What Each Main File Does
 
 ### **README.md**
 Main documentation - start here for overview
@@ -202,7 +202,7 @@ Checks all files present
 
 ---
 
-## 🔧 Customization
+##  Customization
 
 ### Change Network Size
 Edit `config/sudoku_config.yaml`:
@@ -232,19 +232,19 @@ class TinyRecursiveModel(nn.Module):
 
 ---
 
-## ✅ Verification Checklist
+##  Verification Checklist
 
 Before starting research:
 
 - [ ] All files downloaded and organized
-- [ ] `bash verify.sh` passes ✓
+- [ ] `bash verify.sh` passes 
 - [ ] `python quick_start.py` runs successfully
 - [ ] Results saved to `results/`
 - [ ] (Optional) Pushed to GitHub
 
 ---
 
-## 🎓 Research Workflow
+##  Research Workflow
 
 ### Week 1: Setup & Understanding
 1. Day 1: Setup environment, run quick_start.py
@@ -264,43 +264,43 @@ Before starting research:
 
 ---
 
-## 💡 Key Research Questions
+##  Key Research Questions
 
 Your experiments will answer:
 
 1. **Does recursion replace scale?**
-   ✅ Yes! 2L + recursion > 4L network
+    Yes! 2L + recursion > 4L network
 
 2. **What's optimal recursion depth?**
-   ✅ n=6 steps balances performance & compute
+    n=6 steps balances performance & compute
 
 3. **Why do smaller networks work better?**
-   ✅ Less overfitting on small data (1K samples)
+    Less overfitting on small data (1K samples)
 
 ---
 
-## 📊 Professional Portfolio
+##  Professional Portfolio
 
 This repository is perfect for:
 
-✅ **GitHub Portfolio**
+ **GitHub Portfolio**
 - Professional README
 - Complete documentation
 - Reproducible experiments
 
-✅ **Academic Project**
+ **Academic Project**
 - Paper replication
 - Systematic experiments
 - Clear methodology
 
-✅ **Resume/CV**
+ **Resume/CV**
 - "Implemented and extended TRM research"
 - "Systematic evaluation of 6 architectures"
 - "Professional open-source contribution"
 
 ---
 
-## 🆘 If Something Goes Wrong
+##  If Something Goes Wrong
 
 ### Installation Issues
 ```bash
@@ -335,7 +335,7 @@ python experiments/run_experiments.py --config config/quick_test.yaml --device c
 
 ---
 
-## 📝 Citation (When You Publish)
+##  Citation (When You Publish)
 
 ```bibtex
 @article{jolicoeur2025less,
@@ -348,20 +348,20 @@ python experiments/run_experiments.py --config config/quick_test.yaml --device c
 
 ---
 
-## 🎉 You're All Set!
+##  You're All Set!
 
 You now have:
-✅ Complete TRM implementation
-✅ Systematic experiments ready to run
-✅ Professional documentation
-✅ GitHub-ready repository
-✅ Portfolio-quality project
+ Complete TRM implementation
+ Systematic experiments ready to run
+ Professional documentation
+ GitHub-ready repository
+ Portfolio-quality project
 
 **Next Action**: Run `python quick_start.py` to test everything works!
 
 ---
 
-## 📞 Need Help?
+##  Need Help?
 
 1. **Check docs**: `docs/SETUP.md`, `PACKAGE_README.md`
 2. **Verify files**: `bash verify.sh`
@@ -370,6 +370,6 @@ You now have:
 
 ---
 
-**Good luck with your research!** 🚀
+**Good luck with your research!** 
 
 **Remember**: You can run everything on your M4 Mac for testing, then use Google Colab (free GPU) for the full 4-6 hour experiments!

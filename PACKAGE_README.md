@@ -1,45 +1,45 @@
 # TRM Recursion Study - Complete Repository Package
 
-## 📦 What's Included
+##  What's Included
 
 This package contains everything you need to run, replicate, and extend research on Tiny Recursive Models (TRM) based on the paper "Less is More: Recursive Reasoning with Tiny Networks" by Jolicoeur-Martineau (2025).
 
-## 📂 Directory Structure
+##  Directory Structure
 
 ```
 trm-recursion-study/
-│
-├── 📄 README.md                    # Main documentation
-├── 📄 LICENSE                      # MIT License
-├── 📄 requirements.txt             # Python dependencies
-├── 📄 .gitignore                   # Git ignore patterns
-├── 📄 setup.sh                     # Automated setup script
-├── 📄 quick_start.py              # Quick verification test
-├── 📄 CHECKLIST.md                # Complete file checklist
-│
-├── 📁 src/                        # Source code (3 files, ~2500 lines)
-│   ├── __init__.py               # Package initialization
-│   ├── model.py                  # TRM architecture (~300 lines)
-│   └── trainer.py                # Training loop (~350 lines)
-│
-├── 📁 config/                     # Configuration files (2 files)
-│   ├── sudoku_config.yaml        # Full experiment config
-│   └── quick_test.yaml           # Fast testing config
-│
-├── 📁 experiments/                # Experiment scripts (1 file)
-│   └── run_experiments.py        # Main runner (~250 lines)
-│
-├── 📁 docs/                       # Documentation (2 files)
-│   ├── SETUP.md                  # Installation & setup guide
-│   └── GITHUB_SETUP.md           # GitHub repository guide
-│
-└── 📁 results/                    # Results directory (preserved)
-    └── figures/                   # Figures subdirectory
+
+  README.md                    # Main documentation
+  LICENSE                      # MIT License
+  requirements.txt             # Python dependencies
+  .gitignore                   # Git ignore patterns
+  setup.sh                     # Automated setup script
+  quick_start.py              # Quick verification test
+  CHECKLIST.md                # Complete file checklist
+
+  src/                        # Source code (3 files, ~2500 lines)
+    __init__.py               # Package initialization
+    model.py                  # TRM architecture (~300 lines)
+    trainer.py                # Training loop (~350 lines)
+
+  config/                     # Configuration files (2 files)
+    sudoku_config.yaml        # Full experiment config
+    quick_test.yaml           # Fast testing config
+
+  experiments/                # Experiment scripts (1 file)
+    run_experiments.py        # Main runner (~250 lines)
+
+  docs/                       # Documentation (2 files)
+    SETUP.md                  # Installation & setup guide
+    GITHUB_SETUP.md           # GitHub repository guide
+
+  results/                    # Results directory (preserved)
+     figures/                   # Figures subdirectory
 
 Total: 18 files, ~3000+ lines of code & documentation
 ```
 
-## 🚀 Quick Start (3 Steps)
+##  Quick Start (3 Steps)
 
 ### 1. Install Dependencies
 ```bash
@@ -62,7 +62,7 @@ python quick_start.py
 python experiments/run_experiments.py --config config/sudoku_config.yaml
 ```
 
-## 📊 What Each File Does
+##  What Each File Does
 
 ### Core Implementation (`src/`)
 
@@ -163,7 +163,7 @@ python experiments/run_experiments.py --config config/sudoku_config.yaml
 - Attribution required
 - Commercial use allowed
 
-## 🎯 Expected Results
+##  Expected Results
 
 ### Quick Test (M4 Mac, 10 minutes)
 ```
@@ -185,14 +185,14 @@ baseline_2L_n6  2       6    7.0M     0.82-0.87  ← Optimal
 ```
 
 **Key Findings:**
-- ✅ 2 layers optimal (not 1 or 4)
-- ✅ n=6 recursions best balance
-- ✅ Small networks + recursion > large networks
-- ✅ 87.4% accuracy achievable with proper data
+-  2 layers optimal (not 1 or 4)
+-  n=6 recursions best balance
+-  Small networks + recursion > large networks
+-  87.4% accuracy achievable with proper data
 
-## 💻 Hardware Compatibility
+##  Hardware Compatibility
 
-### ✅ M4 MacBook Pro (Your Setup)
+###  M4 MacBook Pro (Your Setup)
 ```bash
 # Works perfectly for development
 python quick_start.py           # 5-10 minutes
@@ -207,28 +207,28 @@ python experiments/run_experiments.py --config config/quick_test.yaml  # 20-30 m
 **Not recommended for:**
 - Full experiments (10-20x slower)
 
-### ✅ Google Colab (Free GPU)
+###  Google Colab (Free GPU)
 ```python
 # Upload files and run in notebook
 !python experiments/run_experiments.py --config config/sudoku_config.yaml
 # Takes 4-6 hours with T4 GPU
 ```
 
-### ✅ NVIDIA GPU (16GB+)
+###  NVIDIA GPU (16GB+)
 ```bash
 # Optimal setup
 python experiments/run_experiments.py --config config/sudoku_config.yaml
 # Can increase batch_size to 64-96
 ```
 
-### ⚠️ CPU Only
+###  CPU Only
 ```bash
 # Very slow but works
 python quick_start.py  # Still reasonable (~10-15 min)
 # Full experiments not recommended (would take 50-100x longer)
 ```
 
-## 📈 Customization Examples
+##  Customization Examples
 
 ### Change Network Size
 ```yaml
@@ -255,7 +255,7 @@ wandb_project: "my-trm-experiments"
 wandb_entity: "your-username"
 ```
 
-## 🔬 Extending the Research
+##  Extending the Research
 
 ### Add New Dataset
 ```python
@@ -284,7 +284,7 @@ df = pd.read_csv('results/experiment_results.csv')
 # Your plotting code
 ```
 
-## 📚 Related Resources
+##  Related Resources
 
 ### Original Paper
 - **Title**: "Less is More: Recursive Reasoning with Tiny Networks"
@@ -305,7 +305,7 @@ df = pd.read_csv('results/experiment_results.csv')
 - **ARC-AGI-1**: 800 geometric reasoning tasks
 - **ARC-AGI-2**: 1120 harder reasoning tasks
 
-## 🎓 Learning Path
+##  Learning Path
 
 1. **Day 1: Understand TRM**
    - Read README.md
@@ -327,24 +327,24 @@ df = pd.read_csv('results/experiment_results.csv')
    - Try new architectures
    - Implement new datasets
 
-## 📊 Success Metrics
+##  Success Metrics
 
-✅ **Installation Success**
+ **Installation Success**
 - `python quick_start.py` runs without errors
 - Model trains and improves accuracy
 - Results saved to results/
 
-✅ **Experiment Success**
+ **Experiment Success**
 - Baseline achieves >80% test accuracy
 - 2-layer outperforms 1-layer and 4-layer
 - n=6 recursions optimal
 
-✅ **Repository Success**
+ **Repository Success**
 - Can git push to GitHub
 - Others can clone and run
 - Results reproducible
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### ImportError: No module named 'src'
 ```bash
@@ -362,11 +362,11 @@ training:
 
 ### Very Low Accuracy
 ```
-⚠️ Expected on toy random data!
+ Expected on toy random data!
 Real Sudoku data will give 80-87% accuracy
 ```
 
-## 📝 Citation
+##  Citation
 
 ```bibtex
 @article{jolicoeur2025less,
@@ -377,7 +377,7 @@ Real Sudoku data will give 80-87% accuracy
 }
 ```
 
-## 📞 Getting Help
+##  Getting Help
 
 1. **Check documentation first**:
    - README.md (overview)
@@ -398,13 +398,13 @@ Real Sudoku data will give 80-87% accuracy
 
 ---
 
-## ✅ You're Ready!
+##  You're Ready!
 
 This package contains everything needed for:
-- ✅ Research paper replication
-- ✅ Academic project
-- ✅ Portfolio demonstration
-- ✅ Further research extension
+-  Research paper replication
+-  Academic project
+-  Portfolio demonstration
+-  Further research extension
 
 **Total Time to Setup**: 10-15 minutes
 **Total Time to Run Quick Test**: 5-10 minutes
@@ -412,6 +412,6 @@ This package contains everything needed for:
 
 ---
 
-**Good luck with your TRM research!** 🚀
+**Good luck with your TRM research!** 
 
 For questions: Open a GitHub issue or check docs/

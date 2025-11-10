@@ -1,24 +1,24 @@
-# 📑 Complete File Index - TRM Repository
+#  Complete File Index - TRM Repository
 
 ## Quick Stats
 - **Total Files**: 23
 - **Total Size**: ~106 KB
 - **Lines of Code**: ~3500+
-- **Status**: ✅ Complete and ready
+- **Status**:  Complete and ready
 
 ---
 
-## 📖 How to Use This Index
+##  How to Use This Index
 
 Each file is listed with:
-- 📁 Location
-- 📏 Size
-- 📝 Purpose
-- 👉 When to read/use it
+-  Location
+-  Size
+-  Purpose
+-  When to read/use it
 
 ---
 
-## 🎯 MUST READ FIRST
+##  MUST READ FIRST
 
 ### START_HERE.md (7.6 KB)
 - **Purpose**: Your entry point - read this FIRST!
@@ -32,7 +32,7 @@ Each file is listed with:
 
 ---
 
-## 📚 Documentation Files (7 files)
+##  Documentation Files (7 files)
 
 ### PACKAGE_README.md (11 KB)
 - **Purpose**: Complete package guide
@@ -71,7 +71,7 @@ Each file is listed with:
 
 ---
 
-## 💻 Core Implementation (3 files)
+##  Core Implementation (3 files)
 
 ### src/model.py (9.2 KB, ~300 lines)
 - **Purpose**: TRM architecture
@@ -107,7 +107,7 @@ Each file is listed with:
 
 ---
 
-## ⚙️ Configuration Files (2 files)
+##  Configuration Files (2 files)
 
 ### config/sudoku_config.yaml (1.8 KB)
 - **Purpose**: Full experiment configuration
@@ -131,7 +131,7 @@ Each file is listed with:
 
 ---
 
-## 🧪 Experiment Scripts (1 file)
+##  Experiment Scripts (1 file)
 
 ### experiments/run_experiments.py (7.9 KB, ~250 lines)
 - **Purpose**: Main experiment runner
@@ -151,7 +151,7 @@ Each file is listed with:
 
 ---
 
-## 🛠️ Utility Scripts (4 files)
+##  Utility Scripts (4 files)
 
 ### quick_start.py (3.8 KB, ~150 lines)
 - **Purpose**: Quick verification test
@@ -204,7 +204,7 @@ Each file is listed with:
 
 ---
 
-## 🗂️ Structure Files (3 files)
+##  Structure Files (3 files)
 
 ### .gitignore (1.2 KB)
 - **Purpose**: Git ignore patterns
@@ -227,7 +227,7 @@ Each file is listed with:
 
 ---
 
-## 📊 Generated Files (Created after running)
+##  Generated Files (Created after running)
 
 These will be created when you run experiments:
 
@@ -253,7 +253,7 @@ These will be created when you run experiments:
 
 ---
 
-## 🎯 Reading Order
+##  Reading Order
 
 ### For Quick Start:
 1. START_HERE.md
@@ -280,7 +280,7 @@ These will be created when you run experiments:
 
 ---
 
-## 💾 File Size Summary
+##  File Size Summary
 
 ```
 Documentation:  ~50 KB  (8 files)
@@ -293,7 +293,7 @@ Total:        ~106 KB  (23 files)
 
 ---
 
-## ✅ Verification Checklist
+##  Verification Checklist
 
 Use this to verify you have everything:
 
@@ -337,7 +337,7 @@ Use this to verify you have everything:
 
 ---
 
-## 🚀 Quick Commands Reference
+##  Quick Commands Reference
 
 ```bash
 # Verify all files present
@@ -359,7 +359,7 @@ cat results/experiment_results.csv
 
 ---
 
-## 📞 Getting Help
+##  Getting Help
 
 **File-specific help:**
 - **Installation issues**: docs/SETUP.md
@@ -375,7 +375,7 @@ python quick_start.py   # Test installation
 
 ---
 
-## 🎉 You're Ready!
+##  You're Ready!
 
 All 23 files are documented and ready to use.
 
@@ -385,4 +385,4 @@ All 23 files are documented and ready to use.
 3. Run `bash verify.sh`
 4. Run `python quick_start.py`
 
-**Good luck with your research!** 🚀
+**Good luck with your research!** 

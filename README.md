@@ -8,14 +8,14 @@
 
 This repository contains a complete implementation and systematic study of **Tiny Recursive Models (TRM)** based on the paper ["Less is More: Recursive Reasoning with Tiny Networks"](https://arxiv.org/abs/2510.04871) by Alexia Jolicoeur-Martineau (Samsung SAIL Montreal, 2025).
 
-## 🎯 Key Findings
+##  Key Findings
 
 - **87.4% accuracy** on Sudoku-Extreme with only **7M parameters** (vs 55% for HRM with 27M)
 - **45% accuracy** on ARC-AGI-1 — beating most LLMs with <0.01% of their parameters
 - **Smaller is better**: 2-layer networks outperform 4-layer networks on small data
 - **Optimal recursion**: n=6 steps, T=3 cycles provides best generalization
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Option 1: Google Colab (Recommended)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com)
@@ -45,7 +45,7 @@ python experiments/run_experiments.py --config config/quick_test.yaml
 python experiments/run_experiments.py --config config/sudoku_config.yaml
 ```
 
-## 📊 Reproducing Paper Results
+##  Reproducing Paper Results
 
 ### Sudoku-Extreme Benchmark
 ```bash
@@ -69,7 +69,7 @@ python experiments/run_experiments.py \
 | E3         | 2      | 2              | 3          | ~7M     | ~73%         |
 | E4         | 2      | 8              | 3          | ~7M     | ~84%         |
 
-## 🏗️ Architecture Overview
+##  Architecture Overview
 
 TRM uses a single tiny network that recursively improves its answer:
 
@@ -89,33 +89,33 @@ for step in range(N_supervision):  # Up to 16 steps
 ```
 
 **Key Innovations over HRM:**
-- ✅ Single network (not two hierarchical networks)
-- ✅ Only 2 layers (not 4 layers)
-- ✅ Full backpropagation (no fixed-point assumptions)
-- ✅ Simpler ACT (single forward pass)
-- ✅ 7M parameters (vs 27M for HRM)
+-  Single network (not two hierarchical networks)
+-  Only 2 layers (not 4 layers)
+-  Full backpropagation (no fixed-point assumptions)
+-  Simpler ACT (single forward pass)
+-  7M parameters (vs 27M for HRM)
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 trm-recursion-study/
-├── src/
-│   ├── model.py          # TRM architecture
-│   ├── trainer.py        # Training loop with deep supervision
-│   ├── data_utils.py     # Dataset loaders
-│   └── ema.py            # Exponential Moving Average
-├── experiments/
-│   ├── run_experiments.py    # Main experiment runner
-│   └── analyze_results.py    # Results visualization
-├── config/
-│   ├── sudoku_config.yaml    # Full experiment config
-│   └── quick_test.yaml       # Fast testing config
-└── results/
-    ├── experiment_results.csv
-    └── figures/
+ src/
+    model.py          # TRM architecture
+    trainer.py        # Training loop with deep supervision
+    data_utils.py     # Dataset loaders
+    ema.py            # Exponential Moving Average
+ experiments/
+    run_experiments.py    # Main experiment runner
+    analyze_results.py    # Results visualization
+ config/
+    sudoku_config.yaml    # Full experiment config
+    quick_test.yaml       # Fast testing config
+ results/
+     experiment_results.csv
+     figures/
 ```
 
-## 🔬 Research Methodology
+##  Research Methodology
 
 ### 1. Model Configurations Tested
 
@@ -142,7 +142,7 @@ trm-recursion-study/
 - **ARC-AGI-1**: 800 tasks (geometric reasoning)
 - **ARC-AGI-2**: 1120 tasks (harder reasoning)
 
-## 📈 Key Results & Visualizations
+##  Key Results & Visualizations
 
 After running experiments, visualize with:
 
@@ -156,7 +156,7 @@ python experiments/analyze_results.py --results results/experiment_results.csv
 3. `generalization_gaps.png` - Overfitting analysis
 4. `param_efficiency.png` - Accuracy vs parameters
 
-## 🧪 Extending the Research
+##  Extending the Research
 
 ### Test New Architectures
 ```python
@@ -183,7 +183,7 @@ train_data = create_dataset(
 )
 ```
 
-## 🎓 Citation
+##  Citation
 
 If you use this code in your research, please cite:
 
@@ -196,7 +196,7 @@ If you use this code in your research, please cite:
 }
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions welcome! Areas of interest:
 - [ ] Additional datasets (Math, Chess, etc.)
@@ -205,23 +205,23 @@ Contributions welcome! Areas of interest:
 - [ ] Extension to generative tasks
 - [ ] Memory-efficient training techniques
 
-## 📝 License
+##  License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Original paper by Alexia Jolicoeur-Martineau (Samsung SAIL Montreal)
 - Built on insights from Hierarchical Reasoning Models (HRM)
 - Inspired by Deep Equilibrium Models (DEQ)
 
-## 📧 Contact
+##  Contact
 
 For questions or collaboration:
 - Open an issue on GitHub
 - Email: [your.email@example.com]
 
-## ⚙️ Hardware Requirements
+##  Hardware Requirements
 
 **Minimal Testing (M4 MacBook):**
 - 16GB RAM
@@ -233,13 +233,13 @@ For questions or collaboration:
 - 4-6 hours for Sudoku-Extreme
 - 24-72 hours for ARC-AGI experiments
 
-## 🐛 Known Issues
+##  Known Issues
 
 - Large recursion depths (n>10) may cause OOM on 16GB GPUs
 - MLP architecture only works well for fixed small context (L≤81)
 - EMA required for stability on small datasets (<1K samples)
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [x] Core TRM implementation
 - [x] Sudoku-Extreme experiments
