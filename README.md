@@ -22,31 +22,26 @@ pip install -r requirements.txt
 
 ## Quick Start
 
+### Local Setup
+```bash
+# Quick test
+python quick_start.py
+
+# Run experiments
+python experiments/run_experiments.py --config config/quick_test.yaml
+```
+
+### Google Colab
+See `notebooks/` for Colab-ready notebooks.
+
+### Python API
 ```python
 from src.model import TinyRecursiveModel
 from src.trainer import TRMTrainer
-import torch
 
-model = TinyRecursiveModel(
-    vocab_size=10,
-    hidden_size=256,
-    num_layers=2,
-    n_recursions=6,
-    T_cycles=3
-)
-
+model = TinyRecursiveModel(hidden_size=256, num_layers=2, n_recursions=6)
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
 trainer = TRMTrainer(model, optimizer, device='cuda')
-```
-
-## Running Experiments
-
-```bash
-# Quick test
-python experiments/run_experiments.py --config config/quick_test.yaml
-
-# Full experiments
-python experiments/run_experiments.py --config config/sudoku_config.yaml
 ```
 
 ## Model Architecture
