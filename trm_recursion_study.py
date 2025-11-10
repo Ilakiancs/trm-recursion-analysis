@@ -12,11 +12,11 @@ import torch
 print("Checking GPU...")
 
 if torch.cuda.is_available():
-    print(f"✓ GPU detected: {torch.cuda.get_device_name(0)}")
+    print(f" GPU detected: {torch.cuda.get_device_name(0)}")
     print(f"  Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
 else:
-    print("⚠ WARNING: No GPU found!")
-    print("\n👉 Fix this: Runtime → Change runtime type → T4 GPU")
+    print(" WARNING: No GPU found!")
+    print("\n Fix this: Runtime → Change runtime type → T4 GPU")
     print("   Then: Runtime → Restart runtime")
 
 # Commented out IPython magic to ensure Python compatibility.
@@ -103,11 +103,11 @@ else:
 # Check that file was created
 import os
 if os.path.exists('trm_model.py'):
-    print("✓ TRM model file created successfully")
+    print(" TRM model file created successfully")
     from trm_model import TinyRecursiveModel
-    print("✓ Model imported successfully")
+    print(" Model imported successfully")
 else:
-    print("✗ Error: File not created")
+    print(" Error: File not created")
 
 import torch
 from torch.utils.data import TensorDataset, DataLoader
@@ -129,7 +129,7 @@ train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_data, batch_size=64)
 test_loader = DataLoader(test_data, batch_size=64)
 
-print(f"✓ Data loaded")
+print(f" Data loaded")
 print(f"  Train: {len(train_data)} samples")
 print(f"  Val: {len(val_data)} samples")
 print(f"  Test: {len(test_data)} samples")
@@ -217,7 +217,7 @@ def train_experiment(config, train_loader, test_loader):
             elapsed = time.time() - start_time
             print(f"Epoch {epoch:3d} | Train: {train_acc:.4f} | Test: {test_acc:.4f} | Time: {elapsed:.1f}s")
 
-    print(f"✓ Best Test Accuracy: {best_test_acc:.4f}")
+    print(f" Best Test Accuracy: {best_test_acc:.4f}")
 
     return {
         'name': config['name'],
@@ -230,7 +230,7 @@ def train_experiment(config, train_loader, test_loader):
         'history': history
     }
 
-print("✓ Training function ready")
+print(" Training function ready")
 
 print("\n" + "="*70)
 print("RUNNING TRM EXPERIMENTS")
@@ -261,7 +261,7 @@ for exp in experiments:
     results.append(result)
     print()
 
-print("\n✓ All experiments complete!")
+print("\n All experiments complete!")
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -335,7 +335,7 @@ plt.tight_layout()
 plt.savefig('trm_results.png', dpi=150, bbox_inches='tight')
 plt.show()
 
-print("\n✓ Visualization complete!")
+print("\n Visualization complete!")
 
 # Plot training curves for key experiments
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -356,7 +356,7 @@ plt.tight_layout()
 plt.savefig('learning_curves.png', dpi=150, bbox_inches='tight')
 plt.show()
 
-print("✓ Learning curves saved")
+print(" Learning curves saved")
 
 from google.colab import files
 import json
@@ -375,7 +375,7 @@ files.download('learning_curves.png')
 files.download('experiment_results.csv')
 files.download('detailed_results.json')
 
-print("\n✓ All files downloaded!")
+print("\n All files downloaded!")
 print("\nYou now have:")
 print("  - trm_results.png (main figure)")
 print("  - learning_curves.png (training dynamics)")
