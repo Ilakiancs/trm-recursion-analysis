@@ -1,0 +1,72 @@
+# Quick test configuration for TRM
+# Fast testing on M4 MacBook or CPU
+
+experiment_name: "quick_test"
+
+# Model architecture (smaller for speed)
+model:
+  vocab_size: 10
+  hidden_size: 128 # Reduced from 256
+  num_layers: 2
+  n_recursions: 4 # Reduced from 6
+  T_cycles: 2 # Reduced from 3
+  seq_len: 81
+  use_attention: false
+
+# Training hyperparameters (shorter)
+training:
+  num_epochs: 50 # Very short
+  batch_size: 16 # Small batch
+  learning_rate: 1.0e-3
+  weight_decay: 0.1
+  n_supervision: 8 # Reduced from 16
+  grad_clip: 1.0
+  use_ema: true
+  ema_decay: 0.999
+  betas: [0.9, 0.95]
+  eps: 1.0e-8
+
+# Data settings (minimal)
+data:
+  train_samples: 100 # Very small
+  test_samples: 50
+  augmentations: 5 # Minimal augmentation
+  val_split: 0.1
+
+# Evaluation
+eval_freq: 10 # More frequent
+save_freq: 25
+save_best: true
+
+# Experiment variations (reduced set)
+experiments:
+  - name: "baseline_2L_n4"
+    num_layers: 2
+    n_recursions: 4
+    T_cycles: 2
+
+  - name: "1L_n4"
+    num_layers: 1
+    n_recursions: 4
+    T_cycles: 2
+
+  - name: "2L_n2"
+    num_layers: 2
+    n_recursions: 2
+    T_cycles: 2
+
+# Paths
+output_dir: "./results/quick_test"
+checkpoint_dir: "./checkpoints/quick_test"
+log_dir: "./logs"
+
+# Device (auto-detect)
+device: "auto" # Will use cuda if available, else mps, else cpu
+
+# Logging
+use_wandb: false
+wandb_project: "trm-quick-test"
+verbose: true
+
+# Random seed
+seed: 42
