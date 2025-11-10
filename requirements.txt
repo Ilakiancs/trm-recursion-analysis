@@ -1,0 +1,41 @@
+# Core dependencies for TRM Recursion Study
+# Install with: pip install -r requirements.txt
+
+# Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Scientific Computing
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Data Handling
+pandas>=2.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Progress Bars
+tqdm>=4.65.0
+
+# Configuration
+pyyaml>=6.0
+
+# Optional: Logging and Experiment Tracking
+wandb>=0.15.0
+
+# Optional: Jupyter Notebooks
+jupyter>=1.0.0
+ipykernel>=6.20.0
+notebook>=6.5.0
+
+# Optional: Development Tools
+pytest>=7.3.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+
+# For Python 3.14+ compatibility
+setuptools>=68.0.0
+wheel>=0.40.0
