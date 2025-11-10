@@ -1,0 +1,92 @@
+# Configuration for Sudoku-Extreme experiments
+# Based on "Less is More: Recursive Reasoning with Tiny Networks"
+
+experiment_name: "sudoku_extreme"
+
+# Model architecture
+model:
+  vocab_size: 10 # 0-9 for Sudoku
+  hidden_size: 256
+  num_layers: 2
+  n_recursions: 6
+  T_cycles: 3
+  seq_len: 81 # 9x9 grid
+  use_attention: false # MLP works better for fixed small context
+
+# Training hyperparameters
+training:
+  num_epochs: 150 # For quick testing (paper uses 60K)
+  batch_size: 32 # Reduced for 16GB GPU (paper uses 768)
+  learning_rate: 1.0e-3
+  weight_decay: 0.1
+  n_supervision: 16 # Max supervision steps (ACT early stopping)
+  grad_clip: 1.0
+
+  # EMA settings
+  use_ema: true
+  ema_decay: 0.999
+
+  # Optimizer settings
+  betas: [0.9, 0.95]
+  eps: 1.0e-8
+
+# Data settings
+data:
+  train_samples: 500 # For quick testing (paper uses 1000)
+  test_samples: 200
+  augmentations: 10 # For quick testing (paper uses 1000)
+  val_split: 0.1
+
+# Evaluation
+eval_freq: 20
+save_freq: 50
+save_best: true
+
+# Experiment variations to run
+experiments:
+  - name: "1_layer_n6"
+    num_layers: 1
+    n_recursions: 6
+    T_cycles: 3
+
+  - name: "baseline_2L_n6"
+    num_layers: 2
+    n_recursions: 6
+    T_cycles: 3
+
+  - name: "4_layer_n6"
+    num_layers: 4
+    n_recursions: 6
+    T_cycles: 3
+
+  - name: "2L_n2"
+    num_layers: 2
+    n_recursions: 2
+    T_cycles: 3
+
+  - name: "2L_n4"
+    num_layers: 2
+    n_recursions: 4
+    T_cycles: 3
+
+  - name: "2L_n8"
+    num_layers: 2
+    n_recursions: 8
+    T_cycles: 3
+
+# Paths
+output_dir: "./results/sudoku"
+checkpoint_dir: "./checkpoints/sudoku"
+log_dir: "./logs"
+
+# Device
+device: "cuda" # or "cpu", "mps" for Mac
+
+# Logging
+use_wandb: false
+wandb_project: "trm-recursion-study"
+wandb_entity: null
+verbose: true
+
+# Random seed
+seed: 42
