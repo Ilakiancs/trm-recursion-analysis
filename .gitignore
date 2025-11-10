@@ -16,7 +16,6 @@ venv/
 *.nbconvert/
 
 # outputs and artifacts
-results/
 checkpoints/
 logs/
 wandb/
@@ -31,7 +30,6 @@ wandb/
 .cache/
 
 # local artifacts not tracked
-*.pdf
 trm_recursion_study/
 # Python
 __pycache__/
@@ -95,14 +93,6 @@ datasets/
 *.npz
 *.pkl
 *.pickle
-
-# Results (keep structure but ignore outputs)
-results/*.csv
-results/*.json
-results/**/*.png
-results/**/*.pdf
-!results/.gitkeep
-!results/figures/.gitkeep
 
 # Testing
 .pytest_cache/
