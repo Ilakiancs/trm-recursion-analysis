@@ -29,6 +29,10 @@ wandb/
 
 # misc
 .cache/
+
+# local artifacts not tracked
+*.pdf
+trm_recursion_study/
 # Python
 __pycache__/
 *.py[cod]
