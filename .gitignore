@@ -87,8 +87,8 @@ logs/
 wandb/
 
 # Data (too large for git)
-data/
-datasets/
+/data/
+/datasets/
 *.npy
 *.npz
 *.pkl

@@ -85,13 +85,10 @@ class TinyRecursiveModel(nn.Module):
 
     def latent_recursion(self, x, y, z):
         for _ in range(self.n_recursions):
-            combined = torch.cat([x, y, z], dim=-1)
-            z = self.net(combined)
-            if hasattr(self, "use_residual") and self.use_residual:
-                z = z + self.z_init.expand(x.size(0), -1, -1)
+            z = self.net(torch.cat([x, y, z], dim=-1))
 
-        combined = torch.cat([x, y, z], dim=-1)
-        y = self.net(combined)
+        # answer update doesn't see the question: y <- net(y, z)
+        y = self.net(torch.cat([torch.zeros_like(x), y, z], dim=-1))
         return y, z
 
     def deep_recursion(self, x, y, z):
@@ -101,22 +98,22 @@ class TinyRecursiveModel(nn.Module):
 
         y, z = self.latent_recursion(x, y, z)
         y_pred = self.output_head(y)
-        q_pred = torch.sigmoid(self.q_head(y.mean(dim=1)))
-        return (y.detach(), z.detach()), y_pred, q_pred
+        q_logits = self.q_head(y.mean(dim=1))
+        return (y.detach(), z.detach()), y_pred, q_logits
 
     def forward(self, x_input, y_true=None, n_supervision=16):
         B = x_input.size(0)
-        device = x_input.device
 
         x = self.input_embedding(x_input)
-        y = self.y_init.expand(B, -1, -1).to(device)
-        z = self.z_init.expand(B, -1, -1).to(device)
+        y = self.y_init.expand(B, -1, -1)
+        z = self.z_init.expand(B, -1, -1)
 
         total_loss = 0.0
         steps_taken = 0
 
-        for step in range(n_supervision):
-            (y, z), y_pred, q_pred = self.deep_recursion(x, y, z)
+        for step in range(max(n_supervision, 1)):
+            (y, z), y_pred, q_logits = self.deep_recursion(x, y, z)
+            q_pred = torch.sigmoid(q_logits)
 
             if y_true is not None:
                 ce_loss = F.cross_entropy(
@@ -128,7 +125,7 @@ class TinyRecursiveModel(nn.Module):
                 correct = (
                     (y_pred.argmax(dim=-1) == y_true).float().mean(dim=1, keepdim=True)
                 )
-                halt_loss = F.binary_cross_entropy(q_pred, correct, reduction="mean")
+                halt_loss = F.binary_cross_entropy_with_logits(q_logits, correct)
 
                 step_loss = ce_loss + 0.5 * halt_loss
                 total_loss += step_loss

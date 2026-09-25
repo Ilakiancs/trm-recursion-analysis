@@ -15,8 +15,8 @@ Implementation of Tiny Recursive Models (TRM) from ["Less is More: Recursive Rea
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/trm-recursion-study.git
-cd trm-recursion-study
+git clone https://github.com/ilakiancs/trm-recursion-analysis.git
+cd trm-recursion-analysis
 pip install -r requirements.txt
 ```
 

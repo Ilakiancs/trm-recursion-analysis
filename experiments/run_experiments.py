@@ -19,6 +19,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from src.model import TinyRecursiveModel
 from src.trainer import TRMTrainer
+from src.data_utils import ToyDataGenerator
 
 
 def set_seed(seed):
@@ -41,8 +42,11 @@ def get_device(device_str):
 
 
 def create_toy_sudoku_data(n_samples, augmentations=10):
-    puzzles = torch.randint(0, 10, (n_samples, 81))
-    solutions = torch.randint(1, 10, (n_samples, 81))
+    # puzzles are masked copies of the solution; fully random pairs have nothing
+    # to learn and every config ends up at chance (~1/9)
+    puzzles, solutions = ToyDataGenerator.create_structured_toy_data(
+        n_samples, difficulty="medium"
+    ).tensors
 
     if augmentations > 1:
         puzzles_aug = puzzles.repeat_interleave(augmentations, dim=0)
@@ -61,6 +65,9 @@ def run_single_experiment(config, exp_config, device):
     print(f"  Recursions (n): {exp_config['n_recursions']}")
     print(f"  Cycles (T): {exp_config['T_cycles']}")
     print(f"{'=' * 70}\n")
+
+    # reseed so every config sees the same data and init
+    set_seed(config.get("seed", 42))
 
     # Create datasets
     print("Creating datasets...")
@@ -126,19 +133,19 @@ def run_single_experiment(config, exp_config, device):
         save_path=save_path if config["save_best"] else None,
     )
 
-    # Compile results
+    # same column names as the notebook / analyze_results.py
     return {
         "name": exp_config["name"],
-        "num_layers": exp_config["num_layers"],
+        "layers": exp_config["num_layers"],
         "n_recursions": exp_config["n_recursions"],
         "T_cycles": exp_config["T_cycles"],
+        "test_acc": results["best_test_acc"],
+        "train_acc": results["final_train_acc"],
         "params_M": n_params / 1e6,
+        "gen_gap": results["final_train_acc"] - results["best_test_acc"],
         "effective_depth": exp_config["T_cycles"]
         * (exp_config["n_recursions"] + 1)
         * exp_config["num_layers"],
-        "best_test_acc": results["best_test_acc"],
-        "final_train_acc": results["final_train_acc"],
-        "gen_gap": results["final_train_acc"] - results["best_test_acc"],
         "history": results["history"],
     }
 
@@ -147,9 +154,8 @@ def main(args):
     # Load config
     with open(args.config, "r") as f:
         config = yaml.safe_load(f)
-
-    # Set seed
-    set_seed(config.get("seed", 42))
+    if args.device:
+        config["device"] = args.device
 
     # Get device
     device = get_device(config["device"])
@@ -174,12 +180,16 @@ def main(args):
             all_results.append(result)
 
             print(f"\n {exp_config['name']} complete!")
-            print(f"  Best Test Acc: {result['best_test_acc']:.4f}")
+            print(f"  Best Test Acc: {result['test_acc']:.4f}")
             print(f"  Gen Gap: {result['gen_gap']:.4f}")
 
         except Exception as e:
             print(f"\n {exp_config['name']} failed: {str(e)}")
             continue
+
+    if not all_results:
+        print("\nNo experiments finished, nothing to save.")
+        sys.exit(1)
 
     # Save results
     print(f"\n{'=' * 70}")
@@ -222,14 +232,4 @@ if __name__ == "__main__":
         help="Override device from config (cuda/cpu/mps/auto)",
     )
 
-    args = parser.parse_args()
-
-    # Override device if specified
-    if args.device:
-        with open(args.config, "r") as f:
-            config = yaml.safe_load(f)
-        config["device"] = args.device
-        with open(args.config, "w") as f:
-            yaml.dump(config, f)
-
-    main(args)
+    main(parser.parse_args())
