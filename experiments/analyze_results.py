@@ -4,6 +4,8 @@ Generates publication-quality figures and summary statistics.
 """
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
 import json
@@ -38,6 +40,10 @@ class TRMResultsAnalyzer:
             True if successful, False otherwise
         """
         csv_path = self.results_dir / 'experiment_results.csv'
+        # repo layout keeps the files under results/data
+        if not csv_path.exists() and (self.results_dir / 'data' / 'experiment_results.csv').exists():
+            self.results_dir = self.results_dir / 'data'
+            csv_path = self.results_dir / 'experiment_results.csv'
         json_path = self.results_dir / 'detailed_results.json'
         
         if not csv_path.exists():
@@ -46,6 +52,8 @@ class TRMResultsAnalyzer:
         
         # Load summary
         self.results_df = pd.read_csv(csv_path)
+        if 'gen_gap' not in self.results_df:
+            self.results_df['gen_gap'] = self.results_df['train_acc'] - self.results_df['test_acc']
         print(f" Loaded {len(self.results_df)} experiments from {csv_path}")
         
         # Load detailed results
@@ -70,7 +78,7 @@ class TRMResultsAnalyzer:
         
         # Best configuration
         best_idx = self.results_df['test_acc'].idxmax()
-        best = self.results_df.iloc[best_idx]
+        best = self.results_df.loc[best_idx]
         
         print(f"\n BEST CONFIGURATION:")
         print(f"   Name: {best['name']}")
@@ -81,7 +89,7 @@ class TRMResultsAnalyzer:
         
         # Worst overfitting
         worst_overfit_idx = self.results_df['gen_gap'].idxmax()
-        worst = self.results_df.iloc[worst_overfit_idx]
+        worst = self.results_df.loc[worst_overfit_idx]
         
         print(f"\n  HIGHEST OVERFITTING:")
         print(f"   Name: {worst['name']}")
@@ -92,16 +100,17 @@ class TRMResultsAnalyzer:
         if self.results_df is None:
             return
         
-        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        # compare depth at fixed (n, T): pick the group with the most layer variants
+        layer_exps = max(
+            (g for _, g in self.results_df.groupby(['n_recursions', 'T_cycles'])),
+            key=lambda g: g['layers'].nunique(),
+        ).sort_values('layers')
         
-        # Get layer experiments
-        layer_exps = self.results_df[
-            self.results_df['name'].str.contains('Layer', case=False)
-        ].sort_values('layers')
-        
-        if len(layer_exps) == 0:
+        if layer_exps['layers'].nunique() < 2:
             print("  No layer comparison experiments found")
             return
+        
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
         
         # Plot 1: Accuracy comparison
         x = np.arange(len(layer_exps))
@@ -135,23 +144,24 @@ class TRMResultsAnalyzer:
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f" Saved to {save_path}")
-        plt.show()
+        plt.close(fig)
     
     def plot_recursion_comparison(self, save_path: Optional[str] = None):
         """Plot comparison across different recursion depths."""
         if self.results_df is None:
             return
         
-        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        # compare n at fixed (layers, T)
+        recursion_exps = max(
+            (g for _, g in self.results_df.groupby(['layers', 'T_cycles'])),
+            key=lambda g: g['n_recursions'].nunique(),
+        ).sort_values('n_recursions')
         
-        # Get recursion experiments (2 layers, varying n)
-        recursion_exps = self.results_df[
-            self.results_df['layers'] == 2
-        ].sort_values('n_recursions')
-        
-        if len(recursion_exps) < 2:
+        if recursion_exps['n_recursions'].nunique() < 2:
             print("  Not enough recursion experiments found")
             return
+        
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
         
         # Plot 1: Accuracy vs recursion
         axes[0].plot(recursion_exps['n_recursions'], 
@@ -184,7 +194,7 @@ class TRMResultsAnalyzer:
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f" Saved to {save_path}")
-        plt.show()
+        plt.close(fig)
     
     def plot_learning_curves(self, save_path: Optional[str] = None):
         """Plot learning curves from detailed results."""
@@ -216,7 +226,7 @@ class TRMResultsAnalyzer:
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f" Saved to {save_path}")
-        plt.show()
+        plt.close(fig)
     
     def plot_parameter_efficiency(self, save_path: Optional[str] = None):
         """Plot accuracy vs parameter count."""
@@ -258,12 +268,13 @@ class TRMResultsAnalyzer:
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f" Saved to {save_path}")
-        plt.show()
+        plt.close(fig)
     
     def generate_all_figures(self, output_dir: Optional[str] = None):
         """Generate all analysis figures."""
         if output_dir is None:
-            output_dir = self.results_dir / 'figures'
+            base = self.results_dir.parent if self.results_dir.name == 'data' else self.results_dir
+            output_dir = base / 'figures'
         else:
             output_dir = Path(output_dir)
         
