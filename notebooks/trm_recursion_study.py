@@ -36,14 +36,12 @@ else:
 #         self.y_init = nn.Parameter(torch.randn(1, seq_len, hidden_size) * 0.01)
 #         self.z_init = nn.Parameter(torch.randn(1, seq_len, hidden_size) * 0.01)
 # 
-#         # Simple network
-#         self.net = nn.Sequential(
-#             nn.Linear(hidden_size * 3, hidden_size * 4),
-#             nn.ReLU(),
-#             nn.Linear(hidden_size * 4, hidden_size),
-#             nn.ReLU(),
-#             nn.Linear(hidden_size, hidden_size)
-#         )
+#         # MLP with num_layers hidden layers
+#         layers = [nn.Linear(hidden_size * 3, hidden_size * 4), nn.ReLU()]
+#         for _ in range(num_layers - 1):
+#             layers += [nn.Linear(hidden_size * 4, hidden_size * 4), nn.ReLU()]
+#         layers.append(nn.Linear(hidden_size * 4, hidden_size))
+#         self.net = nn.Sequential(*layers)
 # 
 #         self.output_head = nn.Linear(hidden_size, vocab_size)
 #         self.q_head = nn.Linear(hidden_size, 1)
