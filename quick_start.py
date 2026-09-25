@@ -9,7 +9,7 @@ Usage:
 """
 
 import torch
-from torch.utils.data import TensorDataset, DataLoader
+from torch.utils.data import DataLoader
 import sys
 from pathlib import Path
 
@@ -18,6 +18,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from src.model import TinyRecursiveModel
 from src.trainer import TRMTrainer
+from src.data_utils import ToyDataGenerator
 
 
 def main():
@@ -38,13 +39,9 @@ def main():
 
     # Create tiny dataset
     print("\nCreating toy dataset...")
-    train_x = torch.randint(0, 10, (50, 81))
-    train_y = torch.randint(1, 10, (50, 81))
-    test_x = torch.randint(0, 10, (20, 81))
-    test_y = torch.randint(1, 10, (20, 81))
-
-    train_data = TensorDataset(train_x, train_y)
-    test_data = TensorDataset(test_x, test_y)
+    torch.manual_seed(0)
+    train_data = ToyDataGenerator.create_structured_toy_data(50, "easy")
+    test_data = ToyDataGenerator.create_structured_toy_data(20, "easy")
 
     train_loader = DataLoader(train_data, batch_size=8, shuffle=True)
     test_loader = DataLoader(test_data, batch_size=16)
@@ -97,17 +94,16 @@ def main():
     )
     print("=" * 70 + "\n")
 
-    if results["best_test_acc"] > 0.10:
+    # masked cells are unguessable, so ~0.7 is the ceiling on "easy"; chance is ~0.11
+    if results["best_test_acc"] > 0.2:
         print(" Installation verified! Model is learning.")
         print("\nNext steps:")
         print(
             "1. Run full tests: python experiments/run_experiments.py --config config/quick_test.yaml"
         )
-        print("2. See docs/SETUP.md for detailed instructions")
-        print("3. Check README.md for experiment details")
+        print("2. Analyze: python experiments/analyze_results.py --results-dir results/quick_test")
     else:
-        print(" Model accuracy very low - this is expected on random data")
-        print("Run with real Sudoku data for meaningful results")
+        print(" Model accuracy is near chance - something is off with the setup")
 
     return results
 
@@ -126,4 +122,3 @@ if __name__ == "__main__":
         print(
             "2. Verify PyTorch installation: python -c 'import torch; print(torch.__version__)'"
         )
-        print("3. See docs/SETUP.md for detailed setup instructions")
