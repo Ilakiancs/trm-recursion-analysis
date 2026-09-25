@@ -80,7 +80,7 @@ checkpoint_dir: "./checkpoints/sudoku"
 log_dir: "./logs"
 
 # Device
-device: "cuda" # or "cpu", "mps" for Mac
+device: "auto" # cuda if available, else mps, else cpu
 
 # Logging
 use_wandb: false
