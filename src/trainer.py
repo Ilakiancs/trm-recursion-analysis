@@ -20,23 +20,25 @@ class ExponentialMovingAverage:
             if param.requires_grad:
                 self.shadow[name] = param.data.clone()
 
+    @torch.no_grad()
     def update(self):
         for name, param in self.model.named_parameters():
             if param.requires_grad:
-                self.shadow[name] = (
-                    self.decay * self.shadow[name] + (1 - self.decay) * param.data
-                )
+                self.shadow[name].mul_(self.decay).add_(param.data, alpha=1 - self.decay)
 
+    @torch.no_grad()
     def apply_shadow(self):
         for name, param in self.model.named_parameters():
             if param.requires_grad:
                 self.backup[name] = param.data.clone()
-                param.data = self.shadow[name]
+                # copy instead of rebinding so the shadow can't get mutated through the param
+                param.data.copy_(self.shadow[name])
 
+    @torch.no_grad()
     def restore(self):
         for name, param in self.model.named_parameters():
             if param.requires_grad:
-                param.data = self.backup[name]
+                param.data.copy_(self.backup[name])
         self.backup = {}
 
 
@@ -153,6 +155,10 @@ class TRMTrainer:
         Returns:
             Dictionary with training history
         """
+        if num_epochs < 1:
+            raise ValueError("num_epochs must be >= 1")
+        eval_freq = max(int(eval_freq), 1)
+
         best_test_acc = 0.0
         start_time = time.time()
 
@@ -187,7 +193,7 @@ class TRMTrainer:
                 )
 
                 # Save best model
-                if test_metrics["accuracy"] > best_test_acc:
+                if test_metrics["accuracy"] >= best_test_acc:
                     best_test_acc = test_metrics["accuracy"]
                     if save_path:
                         self.save_checkpoint(save_path, epoch, best_test_acc)
@@ -229,7 +235,9 @@ class TRMTrainer:
         self.history = checkpoint["history"]
 
         if self.use_ema and "ema_shadow" in checkpoint:
-            self.ema.shadow = checkpoint["ema_shadow"]
+            self.ema.shadow = {
+                k: v.to(self.device) for k, v in checkpoint["ema_shadow"].items()
+            }
 
         print(f" Checkpoint loaded: {path}")
         return checkpoint
